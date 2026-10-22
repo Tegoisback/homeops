@@ -1,0 +1,19 @@
+﻿# Python
+__pycache__/
+*.pyc
+.venv/
+dist/
+build/
+*.spec
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+# Secretos y entorno
+.env
+*.pem
+# Sistema
+.DS_Store
+Thumbs.db
