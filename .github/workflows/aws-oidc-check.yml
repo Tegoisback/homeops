@@ -1,0 +1,27 @@
+name: aws-oidc-check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  whoami:
+    name: Comprobar acceso a AWS por OIDC
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Obtener credenciales temporales de AWS
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # v6.2.4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: eu-west-1
+          role-session-name: gha-${{ github.run_id }}
+
+      - name: Quién soy en AWS
+        run: aws sts get-caller-identity
+
+      - name: Comprobar el bucket de estado
+        run: aws s3api head-bucket --bucket "${{ vars.TF_STATE_BUCKET }}"
