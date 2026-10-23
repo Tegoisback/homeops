@@ -17,3 +17,7 @@ crash.log
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Salesforce (extensión de VS Code)
+.sf/
+.sfdx/
