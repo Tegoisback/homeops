@@ -1,9 +1,12 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-  project     = "homeops"
-  github_repo = "Tegoisback/homeops"
-  account_id  = data.aws_caller_identity.current.account_id
+  project    = "homeops"
+  account_id = data.aws_caller_identity.current.account_id
+
+  # Formato "immutable subject" de GitHub: nombre@ID del dueño y del repo.
+  # Los IDs no se reutilizan, así que un repo nuevo con el mismo nombre no podría entrar (repojacking).
+  github_sub_prefix = "repo:Tegoisback@133767351/homeops@1429155241"
 }
 
 # ---------- Bucket para el estado de Terraform ----------
@@ -60,13 +63,13 @@ data "aws_iam_policy_document" "github_trust" {
       values   = ["sts.amazonaws.com"]
     }
 
-    # Solo la rama main y los entornos de GitHub de ESTE repo pueden usar el rol
+    # Solo la rama main y los entornos de GitHub de ESTE repo (por ID) pueden usar el rol
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-        "repo:${local.github_repo}:ref:refs/heads/main",
-        "repo:${local.github_repo}:environment:*",
+        "${local.github_sub_prefix}:ref:refs/heads/main",
+        "${local.github_sub_prefix}:environment:*",
       ]
     }
   }
