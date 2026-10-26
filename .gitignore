@@ -21,3 +21,9 @@ Thumbs.db
 # Salesforce (extensión de VS Code)
 .sf/
 .sfdx/
+
+# Paquetes generados por Terraform
+.build/
+
+# Paquetes generados por Terraform
+.build/
